@@ -17,6 +17,7 @@ export function validate(d: Design) {
     for (const c of t.columns) {
       if (!identifier.test(c.name) || cols.has(c.name.toLowerCase()) || !types.includes(c.type as typeof types[number]) || typeof c.primary !== 'boolean' || typeof c.nullable !== 'boolean' || typeof c.reference !== 'string' || typeof c.id !== 'string' || ids.has(c.id)) throw new Error('Kolom tidak valid atau duplikat di ' + t.name);
       cols.add(c.name.toLowerCase()); ids.add(c.id);
+      if (c.primary && c.type === 'TEXT') throw new Error('Primary key MySQL tidak dapat memakai tipe TEXT tanpa panjang indeks. Pilih VARCHAR atau tipe lain.');
     }
   }
   for (const t of d.tables) for (const c of t.columns) if (c.reference) {
